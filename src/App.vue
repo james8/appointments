@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <appointment-grid></appointment-grid>
-        <appointment-form></appointment-form>
     </div>
 </template>
 
@@ -9,14 +8,12 @@
     import { Vue, Component } from "vue-property-decorator";
 
     import AppointmentGrid from "@/components/AppointmentGrid.vue";
-    import AppointmentForm from "@/components/AppointmentForm.vue";
     import Backdrop from "@/components/Backdrop.vue";
     import DatePicker from "@/components/DatePicker.vue";
 
     @Component({
         components: {
             AppointmentGrid,
-            AppointmentForm,
             Backdrop,
             DatePicker
         }
@@ -31,6 +28,7 @@
 <style>
     * {
         box-sizing: border-box;
+        font-variant: small-caps;
     }
 
     #app {
@@ -42,7 +40,54 @@
         margin-top: 60px;
     }
 
+    /* button */
+    .btn {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+        color: #000;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 5px 10px;
+        padding: 10px;
+    }
+
+    .btnNormal {
+        background-color: #42A5F5;
+    }
+    
+    .btnNormal:hover {
+        background-color: #1E88E5;
+    }
+
+    .btnSuccess {
+        background-color: #66BB6A;
+    }
+
+    .btnSuccess:hover {
+        background-color: #43A047;
+    }
+
+    .btnError {
+        background-color: #EF5350;
+    }
+
+    .btnError:hover {
+        background-color: #E53935;
+    }
+
+    .btnDisabled, .btnDisabled:hover {
+        background-color: #d0d0d0;
+        color: #5f5f5f;
+        cursor: not-allowed;
+    }
+
     /* form element */
+    .isRequired {
+        color: #e40000;
+    }
+
     .form header {
         border-bottom: 4px double #000;
         font-size: 24px;

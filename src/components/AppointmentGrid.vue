@@ -12,9 +12,13 @@
                 <appointment-grid-slot :type="'no-slot'" :info="noSlots"></appointment-grid-slot>
             </div> -->
             <div id="section-appointments" v-for="(appts, apptsIndex) in appts" :key="`appts${ apptsIndex }`" class="section">
-                <appointment-grid-slot v-for="(appt, apptIndex) in appts" :key="`appt${ apptIndex }`" :type="(apptIndex === 0) ? 'header' : 'appointment'" :info="appt"></appointment-grid-slot>
+                <appointment-grid-slot v-for="(appt, apptIndex) in appts" :key="`appt${ apptIndex }`"
+                    :type="(apptIndex === 0) ? 'header' : 'appointment'" :info="appt"
+                    @selectedGridSlot="SelectedGridSlot($event);">
+                </appointment-grid-slot>
             </div>
         </div>
+        <appointment-form v-if="slotInfo.slots > -1" :info="slotInfo" :timeslots="timeslots" @returnedApptFormData="ReturnedApptFormData($event);"></appointment-form>
     </div>
 </template>
 
@@ -27,10 +31,12 @@
     import { Employee } from "@/apis/Employee.ts";
     import { Service } from "@/apis/Service.ts";
 
+    import AppointmentForm from "@/components/AppointmentForm.vue";
     import AppointmentGridSlot from "@/components/AppointmentGridSlot.vue";
     
     @Component({
         components: {
+            AppointmentForm,
             AppointmentGridSlot
         }
     })
@@ -40,6 +46,7 @@
         appts: Array<Array<Appointment>> = [];
         loading: boolean = false;
         colRepeater: string = "1, auto";
+        slotInfo: Appointment = new Appointment(); 
 
         created(): void {
             // start & end times (represented in hour)
@@ -49,7 +56,7 @@
             const mins: Array<string> = ["00", "15", "30", "45"];
 
             // initialize timeslots
-            this.timeslots.push(new Appointment);
+            this.timeslots.push(new Appointment({ slots: 1 }));
             for (let i: number = startTime; i < endTime; i++) {
                 const hour: string = ((i < 13) ? i : (i - 12)).toString();
                 // const tod: string = ((i < 13) ? 'AM' : 'PM');
@@ -96,7 +103,7 @@
                                 temp.push(new Appointment({
                                     timeslot: ((i - startTime) + j),
                                     slots: 1,
-                                    employee: activeEmployee
+                                    employee: (resultEmployees.find(resultEmployee => (resultEmployee.id === activeEmployee)) as Employee)
                                 }));
                             }
                         }
@@ -126,10 +133,13 @@
                             if (item.apptBreak === undefined) item.apptBreak = new Break({ id: -1, title: "Break Not Found" });
                         }
 
+                        // convert employeeId to Employee
+                        item.employee = resultEmployees.find(resultEmployee => (resultEmployee.id === item.employee)) as Employee;
+
                         // add appointments for Employees
-                        this.appts[item.employee].splice(item.timeslot + 1, 0, item);
+                        this.appts[item.employee.id].splice(item.timeslot + 1, 0, item);
                         // remove extra default appointments
-                        this.appts[item.employee].splice(item.timeslot + 2, item.slots);
+                        this.appts[item.employee.id].splice(item.timeslot + 2, item.slots);
                     });
                     // remove Employee(s) if not active
                     this.appts = this.appts.filter((slot: Array<Appointment>) => (slot !== undefined));
@@ -137,6 +147,14 @@
                     // set width of Employee columns
                     this.colRepeater = `${ this.appts.length }, 200px`;
                 });
+        }
+
+        SelectedGridSlot(event: Appointment): void {
+            this.slotInfo = event;
+        }
+
+        ReturnedApptFormData(event: any): void {
+            this.slotInfo = new Appointment();
         }
     };
 </script>

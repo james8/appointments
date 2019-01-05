@@ -1,7 +1,9 @@
 <!-- AppointmentGridSlot Component
 
     @Prop type: string ['timeslot', 'no-slot', 'header', appointment']      -> Type of slot to be created
-    @Prop info: IAppointment	                                            -> Object containing information for slot
+    @Prop info: Appointment	                                                -> Object containing information for slot
+
+    @Output SelectGridSlot()                                                -> Returns selected AppointmentGridSlot information
 -->
 
 <template>
@@ -14,10 +16,10 @@
         </div>
         <!-- <div id="no-slot" v-if="type === 'no-slot'"></div> -->
         <div id="appointment" v-if="type === 'appointment'">
-            <div v-if="info.type === ''" class="appt">
+            <div v-if="info.type === ''" class="appt" @click="SelectGridSlot();">
                 <i class="fas fa-plus"></i>
             </div>
-            <div v-else-if="info.type === 'service'" class="apptService">
+            <div v-else-if="info.type === 'service'" class="apptService" @click="SelectGridSlot();">
                 <div class="apptServiceHead">
                     <span>{{ info.client.title }}</span>
                     <span>{{ info.client.phone | FPhoneNumber }}</span>
@@ -29,7 +31,7 @@
                     </span>
                 </div>
             </div>
-            <div v-else-if="info.type === 'break'" class="apptBreak">
+            <div v-else-if="info.type === 'break'" class="apptBreak" @click="SelectGridSlot();">
                 <span>{{ info.apptBreak.title }}</span>
             </div>
         </div>
@@ -60,6 +62,10 @@
 
         created(): void {
             this.slotSpan = ((this.info !== undefined) ? `span ${ this.info.slots }` : '');
+        }
+
+        SelectGridSlot(): void {
+            this.$emit('selectedGridSlot', this.info);
         }
     };
 </script>
@@ -156,7 +162,6 @@
     #appointment .apptBreak {
         background-color: lightgoldenrodyellow;
         border: 2px solid #000;
-        font-variant: small-caps;
         display: flex;
         justify-content: center;
         align-items: center;

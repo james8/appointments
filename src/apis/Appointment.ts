@@ -1,15 +1,16 @@
 // appointment APIs
 
-import { Client } from "@/apis/Client.ts";
-import { Service } from "@/apis/Service.ts";
 import { Break } from "@/apis/Break.ts";
+import { Client } from "@/apis/Client.ts";
+import { Employee } from "@/apis/Employee.ts";
+import { Service } from "@/apis/Service.ts";
 
 export class Appointment {
     timeslot: number;
     slots: number;
     type: string;
     label: string;
-    employee: number;
+    employee: number | Employee;
     client: number | Client;
     services: Array<number> | Array<Service>;
     apptBreak: number | Break;
