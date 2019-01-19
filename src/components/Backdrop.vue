@@ -23,5 +23,6 @@
         right: 0px;
         bottom: 0px;
         left: 0px;
+        z-index: 5;
     }
 </style>

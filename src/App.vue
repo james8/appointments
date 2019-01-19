@@ -1,26 +1,24 @@
 <template>
     <div id="app">
-        <appointment-grid></appointment-grid>
+        <navigation-tabs></navigation-tabs>
+        <router-view />
     </div>
 </template>
 
 <script lang="ts">
     import { Vue, Component } from "vue-property-decorator";
 
-    import AppointmentGrid from "@/components/AppointmentGrid.vue";
-    import Backdrop from "@/components/Backdrop.vue";
-    import DatePicker from "@/components/DatePicker.vue";
+    import NavigationTabs from "@/components/NavigationTabs.vue";
+    import wicgInert from "@/../node_modules/wicg-inert/dist/inert.js";
 
     @Component({
         components: {
-            AppointmentGrid,
-            Backdrop,
-            DatePicker
+            NavigationTabs
         }
     })
     export default class App extends Vue {
-        ReturnedSelectedDate(event: any): void {
-            console.log(event)
+        created(): void {
+            wicgInert;
         }
     };
 </script>
@@ -31,13 +29,57 @@
         font-variant: small-caps;
     }
 
+    html {
+        height: 100%;
+        /* min-width: 1232px; */
+    }
+
+    body {
+        height: 100%;
+        margin: 0px;
+    }
+
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
+        height: calc(100% - 48px);
+    }
+
+    .fancy {
+        font-style: italic;
+        text-align: left;
+    }
+
+    /* fieldset */
+    .fieldset {
+        border: 2px solid #a8a8a8;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .fieldset .legend {
+        background-color: #fff;
+        font-weight: bold;
+        text-align: left;
+        padding: 0px 5px;
+        position: absolute;
+        top: -10px;
+        left: 5px;
+    }
+
+    @media screen and (max-width: 1075px) {
+        .fieldset {
+            padding-left: 20px;
+            text-align: left;
+            flex-direction: column;
+        }
     }
 
     /* button */
@@ -105,6 +147,7 @@
         border-radius: 5px;
         border: 1px solid #000;
         box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.5);
+        max-width: 550px;
         overflow: auto;
         padding: 20px;
         position: fixed;
@@ -127,8 +170,8 @@
 
     @media screen and (max-width: 600px) {
         .form form {
-            right: 5%;
-            left: 5%;
+            right: 5% !important;
+            left: 5% !important;
         }
 
         .form .buttons {

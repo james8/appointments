@@ -18,7 +18,7 @@
                 </appointment-grid-slot>
             </div>
         </div>
-        <appointment-form v-if="slotInfo.slots > -1" :info="slotInfo" :timeslots="timeslots" @returnedApptFormData="ReturnedApptFormData($event);"></appointment-form>
+        <appointment-form v-if="slotInfo.slots > -1" :info="slotInfo" :timeslots="timeslots" :services="resultServices" @returnedApptFormData="ReturnedApptFormData($event);"></appointment-form>
     </div>
 </template>
 
@@ -47,6 +47,7 @@
         loading: boolean = false;
         colRepeater: string = "1, auto";
         slotInfo: Appointment = new Appointment(); 
+        resultServices: Array<Service> = [];
 
         created(): void {
             // start & end times (represented in hour)
@@ -89,7 +90,7 @@
                     const resultBreaks: Array<Break> = results[apiCalls.findIndex(apiCall => (apiCall.tag === "breaks"))];
                     const resultClients: Array<Client> = results[apiCalls.findIndex(apiCall => (apiCall.tag === "clients"))];
                     const resultEmployees: Array<Employee> = results[apiCalls.findIndex(apiCall => (apiCall.tag === "employees"))];
-                    const resultServices: Array<Service> = results[apiCalls.findIndex(apiCall => (apiCall.tag === "services"))];
+                    this.resultServices = results[apiCalls.findIndex(apiCall => (apiCall.tag === "services"))];
 
                     // populate default slots for active Employees
                     let temp: Array<Appointment> = [];
@@ -121,7 +122,7 @@
                             // convert serviceId to Service
                             let apptServices: Array<Service> = [];
                             (item.services as Array<number>).forEach((service: number) => {
-                                apptServices.push(resultServices.find(resultService => (resultService.id === service)) as Service);
+                                apptServices.push(this.resultServices.find(resultService => (resultService.id === service)) as Service);
                             });
                             item.services = apptServices;
                             item.services = item.services.map(service => ((service === undefined) ? new Service({ id: -1, title: "Service Not Found" }) : service));

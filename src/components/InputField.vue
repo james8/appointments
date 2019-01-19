@@ -1,15 +1,17 @@
 <!--
-    @Prop id: string            -> ID given to input field
-    @Prop type?: string         -> Type of input field (optional)
-    @Prop label?: string        -> Value for label (optional)
-    @Prop value?: string        -> Value passed to input field (optional)
-    @Prop placeHolder?: string  -> Value for input field place holder (optional)
-    @Prop isDisabled?: boolean  -> Flag if input field is disabled/enabled (optional)
-    @Prop isRequired?: boolean  -> Flag if input field is required (optional)
-    @Prop errorId?: string      -> ID used to populate aria-describedby (optional)
-    @Prop errorMsg?: string	    -> Error message to be displayed (optional)
+    @Prop id: string                    -> ID given to input field
+    @Prop type?: string                 -> Type of input field (optional)
+    @Prop label?: string                -> Value for label (optional)
+    @Prop value?: string                -> Value passed to input field (optional)
+    @Prop placeHolder?: string          -> Value for input field place holder (optional)
+    @Prop watchForChange? boolean       -> Flag if Parent wants to know when value changes (optional)
+    @Prop isDisabled?: boolean          -> Flag if input field is disabled/enabled (optional)
+    @Prop isRequired?: boolean          -> Flag if input field is required (optional)
+    @Prop errorId?: string              -> ID used to populate aria-describedby (optional)
+    @Prop errorMsg?: string	            -> Error message to be displayed (optional)
 
-    @Output Changed(Event)      -> Function called whenever input field changes; Passes value of input field back to Parent Component
+    @Output VModelChanged()             -> Function called when vModel (input value) changes & watchForChange TRUE; Passes TRUE back to Parent Component
+    @Output Changed(Event)              -> Function called whenever input field changes; Passes value of input field back to Parent Component
 -->
 
 <template>
@@ -27,7 +29,7 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from "vue-property-decorator";
+    import { Vue, Component, Prop, Watch } from "vue-property-decorator";
     import FPhoneNumber from "@/filters/PhoneNumber.ts";
 
     @Component({
@@ -44,6 +46,7 @@
         @Prop({ type: String }) label!: string;
         @Prop({ type: String }) value!: string;
         @Prop({ type: String }) placeHolder!: string;
+        @Prop({ type: Boolean }) watchForChange!: boolean;
         @Prop({ type: Boolean }) isDisabled!: boolean;
         @Prop({ type: Boolean }) isRequired!: boolean;
         @Prop({ type: String }) errorId!: string;
@@ -58,7 +61,7 @@
             setTimeout(() => {
                 const elems: NodeListOf<Element> = document.querySelectorAll(`#${ this.id }`);
                 if (this.type === 'phone') {
-                    elems.forEach((elem: Element) => elem.setAttribute('pattern', '[0-9]{10,11}'));
+                    elems.forEach((elem: Element) => elem.setAttribute('pattern', '[0-9]{10}'));
                 }
             }, 500);
         }
@@ -90,6 +93,18 @@
                     break;
                 }
             }
+        }
+
+        // update vModel if provided prop 'value' changed
+        @Watch('value')
+        ValueChanged(newVal: string, oldVal: string): void {
+            this.vModel = this.value;
+        }
+        
+        // let Parent Component know that value changed
+        @Watch('vModel')
+        VModelChanged(newVal: string, oldVal: string): void {
+            if (this.watchForChange) this.$emit('inputChanged', true);
         }
     }
 </script>

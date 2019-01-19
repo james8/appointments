@@ -10,7 +10,9 @@
   "dependencies": {
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^7.0.0"
+    "vue-property-decorator": "^7.0.0",
+    "vue-router": "^3.0.2",
+    "wicg-inert": "^2.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
