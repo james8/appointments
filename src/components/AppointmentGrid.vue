@@ -95,9 +95,10 @@
                     // populate default slots for active Employees
                     let temp: Array<Appointment> = [];
                     resultActiveEmployees.forEach((activeEmployee: number) => {
+                        const employee: Employee = resultEmployees.find(resultEmployee => (resultEmployee.id === activeEmployee)) as Employee;
                         temp.push(new Appointment({
                             slots: 1,
-                            label: (resultEmployees.find(resultEmployee => (resultEmployee.id === activeEmployee)) as Employee).name
+                            label: `${ employee.firstName } ${ employee.lastName }`
                         }));
                         for (let i: number = startTime; i < endTime; i++) {
                             for (let j: number = 0; j < mins.length; j++) {
@@ -117,7 +118,7 @@
                         if (item.type === "service") {
                             // convert clientId to Client
                             item.client = resultClients.find(resultClient => (resultClient.id === item.client)) as Client;
-                            if (item.client === undefined) item.client = new Client({ id: -1, title: "Client Not Found" });
+                            if (item.client === undefined) item.client = new Client(-1, "Client Not Found");
 
                             // convert serviceId to Service
                             let apptServices: Array<Service> = [];
@@ -125,7 +126,7 @@
                                 apptServices.push(this.resultServices.find(resultService => (resultService.id === service)) as Service);
                             });
                             item.services = apptServices;
-                            item.services = item.services.map(service => ((service === undefined) ? new Service({ id: -1, title: "Service Not Found" }) : service));
+                            item.services = item.services.map(service => ((service === undefined) ? new Service(-1, "Service Not Found") : service));
                         }
                         // update Appointment - Break
                         else {
