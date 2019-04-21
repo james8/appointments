@@ -2,28 +2,28 @@
 
     @Prop() labels: Array<string>           -> Labels for each toggle state
     @Prop() value: boolean	                -> Value of toggle field
-    @Prop() disabled: boolean	            -> Flag if field is disabled or not
+    @Prop() isDisabled: boolean	            -> Flag if field is disabled or not
     
     @Output Toggle()                        -> Return toggle state
 -->
 
 <template>
     <div id="toggle-field">
-        <div class="toggleContainer" v-bind:class="{ 'toggleSelected': selected, 'toggleDisabled': disabled }" @click="Toggle();">
-            <div v-if="!disabled" class="toggle"></div>
+        <div class="toggleContainer" v-bind:class="{ 'toggleSelected': selected, 'toggleDisabled': isDisabled }" @click="Toggle();">
+            <div v-if="!isDisabled" class="toggle"></div>
         </div>
-        <span class="toggleLabel">{{ labels[selected ? 1 : 0] }}</span>
+        <span class="toggleLabel" v-bind:class="{ 'toggleDisabled': isDisabled }" @click="Toggle();">{{ labels[selected ? 1 : 0] }}</span>
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from "vue-property-decorator";
+    import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 
     @Component
     export default class ToggleField extends Vue {
         @Prop({ type: Array, required: true }) labels!: Array<string>;
         @Prop({ type: Boolean, required: true }) value!: boolean;
-        @Prop({ type: Boolean }) disabled!: boolean;
+        @Prop({ type: Boolean }) isDisabled!: boolean;
 
         selected: boolean = false;
 
@@ -32,10 +32,16 @@
         }
 
         Toggle(): void {
-            if (!this.disabled) {
+            if (!this.isDisabled) {
                 this.selected = !this.selected;
                 this.$emit('toggled', this.selected);
             }
+        }
+
+        // update 'selected' if provided prop 'value' changed
+        @Watch('value')
+        ValueChanged(newVal: boolean, oldVal: boolean): void {
+            this.selected = newVal;
         }
     };
 </script>
@@ -48,7 +54,7 @@
     }
 
     .toggleContainer {
-        background-color: #66BB6A;
+        background-color: #EF5350;
         border-radius: 25px;
         box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
         cursor: pointer;
@@ -59,7 +65,7 @@
     }
 
     .toggleSelected {
-        background-color: #EF5350;
+        background-color: #66BB6A;
         padding-left: 27px;
         transition: background-color 0.2s ease, padding-left 0.2s ease;
     }
@@ -73,6 +79,7 @@
     }
 
     .toggleLabel {
+        cursor: pointer;
         padding-left: 10px;
     }
 
