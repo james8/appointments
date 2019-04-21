@@ -2,13 +2,13 @@
 
 export class Service {
     id: number;
-    title: string;
+    name: string;
     description: string;
     timeSlots: number;
 
-    constructor({ id = -1, title = "", description = "", timeSlots = -1 }: any = {}) {
+    constructor(id = -1, name = "", description = "", timeSlots = -1) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.description = description;
         this.timeSlots = timeSlots;
     }
@@ -16,8 +16,8 @@ export class Service {
     public static GetServices(): Promise<Array<Service>> {
         return new Promise((resolve, reject) => {
             const data: Array<Service> = [
-                new Service({ id: 0, title: "Service 1", description: "Serivce 1 description", timeSlots: 1 }),
-                new Service({ id: 1, title: "Service 2", description: "Serivce 2 description", timeSlots: 2 })
+                new Service(0, "Service 1", "Serivce 1 description", 1),
+                new Service(1, "Service 2", "Serivce 2 description", 2),
             ];
             resolve(data);
         });
