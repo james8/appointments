@@ -16,14 +16,14 @@
         <div class="menu mobileMenu">
             <button type="button" class="menuToggle fas fa-bars" @click="OpenMobileMenu();"></button>
             <ul class="menu" role="menu" v-bind:class="cssMenuClass">
-                <li class="menuItem" role="menuitem" v-for="(route, index) in routes" :key="index" inert>
+                <li class="menuItem" role="menuitem" v-for="(route, index) in routes" :key="index" inert @click="CloseMobileMenu();">
                     <router-link :to="route.path">{{ route.name }}</router-link>
                 </li>
-                <li class="menuItem" role="menuitem" inert>
+                <li class="menuItem" role="menuitem" inert @click="CloseMobileMenu();">
                     <span @click="Logout()">Logout</span>
                 </li>
             </ul>
-            <backdrop v-if="cssMenuClass === 'menuOpen'"></backdrop>
+            <backdrop @backdropClicked="CloseMobileMenu();" v-if="cssMenuClass === 'menuOpen'"></backdrop>
         </div>
     </div>
 </template>
@@ -66,6 +66,10 @@
             navElems.forEach((navElem: Element) => navElem.removeAttribute(attr));
             (document.querySelector('.mobileMenu button') as HTMLButtonElement).setAttribute(attr, '');
             (document.querySelector('#navigation-tabs ~ div') as HTMLElement).setAttribute(attr, '');
+        }
+
+        CloseMobileMenu(): void {
+            this.cssMenuClass = "";
         }
     };
 </script>
@@ -118,7 +122,7 @@
 
     /* mobile menu */
     #navigation-tabs .mobileMenu {
-        display: flex;
+        display: none;
     }
 
     #navigation-tabs .mobileMenu .menuToggle {
@@ -154,7 +158,9 @@
         #navigation-tabs .normalMenu {
             display: none;
         }
+
+        #navigation-tabs .mobileMenu {
+            display: flex;
+        }
     }
 </style>
-
-
