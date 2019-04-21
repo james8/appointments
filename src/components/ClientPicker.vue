@@ -8,38 +8,42 @@
 -->
 
 <template>
-    <div id="client-picker">
+    <div id="client_picker">
         <label :for="id">
             {{ label }}
             <span v-if="isRequired" class="isRequired">*</span>
         </label>
-        <input type="text" :id="id" v-model="filterString" :required="isRequired" :disabled="isDisabled"
-            @keydown.arrow-up="ChangeSelection(0);" @keydown.arrow-down="ChangeSelection(1);"
-            @blur="ToggleResults(0);" @focus="ToggleResults(1);" />
-        <div id="client-picker-results" v-if="(clients.length > 0) && isFocused">
-            <div v-if="loading" class="loaderMsg">
-                <i class="fas fa-cog fa-spin"></i>
-            </div>
-            <div v-for="(client, index) in clients" :key="index" class="result" v-bind:class="{ selectedItem: (selectedItem === index) }" @click="SelectResult(index);">
-                <i class="fas fa-user"></i>
-                <span>{{ client.title }}</span>
 
-                <i class="fas fa-mobile"></i>
-                <span>{{ client.phone | FPhoneNumber }}</span>
-            </div>
-            <!-- Need to implement -->
-            <div class="result">
-                <i class="fas fa-user-plus"></i>
-                <span>New Client</span>
-            </div>
-        </div>
-
-        <div id="client-info">
+        <div id="client_info">
             <span>Name:</span>
             <span>{{ selectedClient.title }}</span>
             <span>Phone:</span>
             <span>{{ selectedClient.phone | FPhoneNumber }}</span>
             <span>Email:</span>
+        </div>
+        
+        <div id="client_results">
+            <!-- Scrolling doesnt move along with selected -->
+            <!-- @keydown.arrow-up="ChangeSelection(0);" @keydown.arrow-down="ChangeSelection(1);" -->
+            <input type="text" :id="id" v-model="filterString" :required="isRequired" :disabled="isDisabled"
+                @blur="ToggleResults(0);" @focus="ToggleResults(1);" />
+            <div id="new_client_link">
+                <a href="/clients" target="_blank">new client</a>
+            </div>
+            <div id="client_picker_results" v-if="(clients.length > 0) && isFocused">
+                <div v-if="loading" class="loaderMsg">
+                    <i class="fas fa-cog fa-spin"></i>
+                </div>
+                <div v-else>
+                    <div v-for="(client, index) in clients" :key="index" class="result" v-bind:class="{ selectedItem: (selectedItem === index) }" @click="SelectResult(index);">
+                        <i class="fas fa-user"></i>
+                        <span>{{ client.title }}</span>
+
+                        <i class="fas fa-mobile"></i>
+                        <span>{{ client.phone | FPhoneNumber }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -132,7 +136,7 @@
 </script>
 
 <style scoped>
-    #client-picker {
+    #client_picker {
         padding: 10px;
         text-align: left;
         position: relative;
@@ -140,71 +144,95 @@
         flex-direction: column;
     }
 
-    #client-picker label {
+    #client_picker label {
         font-weight: bold;
         padding: 5px;
     }
 
-    #client-picker input {
-        padding: 5px;
-    }
-
-    #client-picker-results {
-        background-color: #fff;
-        border: 1px solid #a8a8a8;
-        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-        line-height: 25px;
-        position: absolute;
-        top: 66px;
-        right: 10px;
-        left: 10px;
+    #client_results {
+        position: relative;
         display: flex;
         flex-direction: column;
     }
 
-    #client-picker-results .loaderMsg {
+    #client_results input {
+        padding: 5px;
+        position: relative;
+    }
+
+    #client_picker_results {
+        background-color: #fff;
+        border: 1px solid #a8a8a8;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+        line-height: 25px;
+        max-height: 305px;
+        overflow: auto;
+        position: absolute;
+        top: 30px;
+        right: 0px;
+        left: 0px;
+        z-index: 10;
+    }
+
+    #client_picker_results .loaderMsg {
         font-size: 25px;
         padding: 10px;
     }
     
-    #client-picker-results .loaderMsg:hover {
+    #client_picker_results .loaderMsg:hover {
         background-color: initial;
         cursor: default;
     }
 
-    #client-picker-results .result {
+    #client_picker_results .result {
         border-bottom: 1px solid #909090;
         padding: 5px 10px;
         display: grid;
         grid-template-columns: 25px auto;
     }
 
-    #client-picker-results .result:hover {
+    #client_picker_results .result:hover {
         background-color: rgba(1, 89, 162, 0.25);
         cursor: pointer;
     }
 
-    #client-picker-results .selectedItem {
+    #client_picker_results .selectedItem {
         background-color: rgba(1, 89, 162, 0.25);
     }
 
-    #client-picker-results .result i {
+    #client_picker_results .result i {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    #client-picker-results .result span {
+    #client_picker_results .result span {
         padding-left: 10px;
     }
 
-    #client-info {
+    #client_info {
         background-color: #ffe68a;
         border-radius: 5px;
         line-height: 25px;
-        margin: 15px 0px;
+        margin-bottom: 15px;
         padding: 10px;
         display: grid;
         grid-template-columns: 100px auto;
+    }
+
+    #new_client_link {
+        padding: 5px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #new_client_link a {
+        color: #000;
+        font-style: italic;
+        text-decoration: none;
+    }
+
+    #new_client_link a:hover, #new_client_link a:focus {
+        text-decoration: underline;
     }
 </style>
