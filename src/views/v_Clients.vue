@@ -57,7 +57,7 @@
                         :isDisabled="!canEdit"
                         @inputChange="UpdateClientForm(formFields[1], $event);">
                     </input-field>
-                    <input-field
+                    <input-field v-bind:class="{ 'hideInput': !showPhoneEdit }"
                         :id="'client_phone'"
                         :type="'phone'"
                         :label="'Phone #'"
@@ -68,7 +68,8 @@
                     </input-field>
                     <input-field v-bind:class="{ 'hideInput': showPhoneEdit }"
                         :id="'client_phone_disabled'"
-                        :label="clientNew.phone | FPhoneNumber"
+                        :label="'Phone #'"
+                        :value="clientNew.phone | FPhoneNumber"
                         isRequired
                         :isDisabled="true">
                     </input-field>
