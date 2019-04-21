@@ -3,7 +3,7 @@
 -->
 
 <template>
-    <div id="backdrop"></div>
+    <div id="backdrop" @click="BackdropClicked();"></div>
 </template>
 
 <script lang="ts">
@@ -11,7 +11,9 @@
 
     @Component
     export default class Backdrop extends Vue {
-        
+        BackdropClicked(): void {
+            this.$emit("backdropClicked", true);
+        }        
     }
 </script>
 
