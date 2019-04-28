@@ -61,6 +61,7 @@
     }
     
     #checkbox-field label {
+        cursor: pointer;
         padding-left: 10px;
     }
 </style>
