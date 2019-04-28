@@ -17,7 +17,7 @@
 -->
 
 <template>
-    <div id="input-field">
+    <div id="input_field">
         <label :for="id" v-if="label !== undefined">
             {{ label }}
             <span class="required" v-if="this.isRequired" aria-hidden="true">*</span>
@@ -114,7 +114,7 @@
 </script>
 
 <style scoped>
-    #input-field {
+    #input_field {
         padding: 10px;
         text-align: left;
         display: flex;
