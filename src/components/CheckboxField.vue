@@ -1,12 +1,13 @@
 <!-- CheckboxField Component
     @Prop() id: string	            -> Id used for checkbox
     @Prop() label: string           -> Label used for checkbox
+    @Prop() isDisabled: boolean     -> Boolean if element is disabled
 
     @Output() SelectCheckbox	    -> Returns if checkbox has been checked/unchecked
 -->
 
 <template>
-    <div id="checkbox-field" @click="SelectCheckbox()">
+    <div id="checkbox-field" @click="SelectCheckbox()" v-bind:class="{ disabled: isDisabled }">
         <span :id="id" class="fa-stack">
             <i class="fas fa-square fa-stack-2x"></i>
             <i class="far fa-square fa-stack-2x"></i>
@@ -23,13 +24,21 @@
     export default class CheckboxField extends Vue {
         @Prop({ type: String, required: true }) id!: string;
         @Prop({ type: String, required: true }) label!: string;
+        @Prop({ type: Boolean }) isDisabled!: boolean;
         @Prop({ type: Boolean }) checked!: boolean;
 
         status: boolean = this.checked;
 
+        created(): void {
+            // pass back to Parent that checkbox was checked by default
+            if (this.checked) this.$emit('checkboxStatus', { id: this.id.substr(-1), status: this.status });
+        }
+
         SelectCheckbox(): void {
-            this.status = !this.status;
-            this.$emit('checkboxStatus', { id: this.id.substr(-1), status: this.status });
+            if (!this.isDisabled) {
+                this.status = !this.status;
+                this.$emit('checkboxStatus', { id: this.id.substr(-1), status: this.status });
+            }
         }
     };
 </script>
@@ -52,6 +61,7 @@
         color: #0159a2;
     }
 
+
     #checkbox-field .fa-check {
         display: none;
     }
@@ -63,6 +73,18 @@
     #checkbox-field label {
         cursor: pointer;
         padding-left: 10px;
+    }
+    
+    #checkbox-field.disabled, #checkbox-field.disabled label {
+        cursor: default;
+    }
+
+    #checkbox-field.disabled .fas.fa-square {
+        color: #ebebe4;
+    }
+
+    #checkbox-field.disabled .far.fa-square {
+        color: #c2c2c1;
     }
 </style>
 
