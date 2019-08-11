@@ -13,12 +13,12 @@
             <i class="far fa-square fa-stack-2x"></i>
             <i class="fas fa-check fa-stack-1x" v-bind:class="{ isChecked: status }"></i>
         </span>
-        <label :for="id">{{ label }}</label>
+        <label :for="id" v-if="this.label !== ''">{{ label }}</label>
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from "vue-property-decorator";
+    import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 
     @Component
     export default class CheckboxField extends Vue {
@@ -39,6 +39,11 @@
                 this.status = !this.status;
                 this.$emit('checkboxStatus', { id: this.id.substr(-1), status: this.status });
             }
+        }
+
+        @Watch('checked')
+        ResetCheckbox(): void {
+            this.status = this.checked;
         }
     };
 </script>
