@@ -11,11 +11,14 @@ export class Clock {
         this.cOut = cOut;
     }
 
-    public static GetClocks(): Promise<Clock> {
+    public static GetClocks(): Promise<Array<Clock>> {
         return new Promise((resolve, reject) => {
-            const data: Clock = new Clock({ empId: 1 });
-            // const data: Clock = new Clock({ empId: 1, cIn: new Date() });
-            // const data: Clock = new Clock({ empId: 1, cIn: new Date(), cOut: new Date() });
+            // const data: Array<Clock> = [ new Clock({ empId: 1 }) ];
+            // const data: Array<Clock> = [ new Clock({ empId: 1, cIn: new Date() }) ];
+            const data: Array<Clock> = [
+                new Clock({ empId: 0, cIn: new Date(), cOut: new Date() }),
+                new Clock({ empId: 2, cIn: new Date(), cOut: new Date() }),
+            ];
             resolve(data);
         });
     }

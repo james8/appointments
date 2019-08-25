@@ -6,6 +6,7 @@ import Clients from "@/views/v_Clients.vue";
 import Employees from "@/views/v_Employees.vue";
 import PageNotFound from "@/views/v_PageNotFound.vue";
 import Profile from "@/views/v_Profile.vue";
+import Reports from "@/views/v_Reports.vue";
 import Services from "@/views/v_Services.vue";
 
 Vue.use(Router);
@@ -43,7 +44,7 @@ export default new Router({
         {
             path: "/reports",
             name: "reports",
-            // component:
+            component: Reports
         },
         {
             path: "/options",
